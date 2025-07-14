@@ -6,6 +6,7 @@
  #define INTERRUPTS_H
  
  #include "system_config.h"
+ #include "sensors.h"
  
  // Interrupt setup
  void setupPinChangeInterrupts();

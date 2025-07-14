@@ -135,7 +135,9 @@
    // Update status LED
    digitalWrite(STATUS_LED_PIN, systemFlags.statusLedState);
    
-   // Read temperature sensor ** TO ADD **
+   // Read temperature sensor
+   readTemperatureSensor();
+
    
    // Log periodic status if in monitoring mode
    if (currentState == MONITORING) {
