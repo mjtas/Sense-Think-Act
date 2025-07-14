@@ -4,9 +4,10 @@
  */
 
  #include "system_config.h"
+ #include "interrupts.h"
 
  // Pin definitions
- 
+
  const int MOTION_SENSOR_PIN = 8;    // PCINT0
  const int DOOR_SENSOR_PIN = 9;      // PCINT1
  const int STATUS_LED_PIN = 13;      // Built-in LED
@@ -38,13 +39,10 @@
  // Timing variables
  unsigned long lastSerialUpdate = 0;
  
- // =====================================================================
- // SYSTEM INITIALIZATION
- // =====================================================================
- 
+ // System initialisation
  void systemInit() {
    Serial.begin(115200);
-   Serial.println("=== Sense-Think-Act System Initializing ===");
+   Serial.println("=== Sense-Think-Act System Initialising ===");
    
    // Configure pins
    pinMode(MOTION_SENSOR_PIN, INPUT_PULLUP);
@@ -53,14 +51,16 @@
    pinMode(ALARM_LED_PIN, OUTPUT);
    pinMode(BUZZER_PIN, OUTPUT);
    
-   // Initialize outputs
+   // Initialise outputs
    digitalWrite(STATUS_LED_PIN, LOW);
    digitalWrite(ALARM_LED_PIN, LOW);
    digitalWrite(BUZZER_PIN, LOW);
    
-   // Setup interrupts **TO ADD**
+   // Setup interrupts
+   setupPinChangeInterrupts();
+   setupTimerInterrupt();
    
-   // Initialize sensor states
+   // Initialise sensor states
    sensors.pir = digitalRead(MOTION_SENSOR_PIN);
    sensors.flex = digitalRead(DOOR_SENSOR_PIN);
    sensors.pirPrevious = sensors.pir;
