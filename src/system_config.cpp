@@ -8,8 +8,8 @@
 
  // Pin definitions
 
- const int MOTION_SENSOR_PIN = 8;    // PCINT0
- const int DOOR_SENSOR_PIN = 9;      // PCINT1
+ const int PIR_SENSOR_PIN = 8;        // PCINT0
+ const int TILT_SWTICH_PIN = 9;      // PCINT1
  const int STATUS_LED_PIN = 13;      // Built-in LED
  const int ALARM_LED_PIN = 7;        // External alarm LED
  const int BUZZER_PIN = 6;           // Buzzer for audio alerts
@@ -24,7 +24,7 @@
  
  // Interrupt flags (volatile)
  volatile bool pirDetected = false;
- volatile bool flexDetected = false;
+ volatile bool tiltDetected = false;
  volatile bool timerTick = false;
  volatile bool pciTriggered = false;
  
@@ -45,8 +45,8 @@
    Serial.println("=== Sense-Think-Act System Initialising ===");
    
    // Configure pins
-   pinMode(MOTION_SENSOR_PIN, INPUT_PULLUP);
-   pinMode(DOOR_SENSOR_PIN, INPUT_PULLUP);
+   pinMode(PIR_SENSOR_PIN, INPUT_PULLUP);
+   pinMode(TILT_SWITCH_PIN, INPUT_PULLUP);
    pinMode(STATUS_LED_PIN, OUTPUT);
    pinMode(ALARM_LED_PIN, OUTPUT);
    pinMode(BUZZER_PIN, OUTPUT);
@@ -61,16 +61,16 @@
    setupTimerInterrupt();
    
    // Initialise sensor states
-   sensors.pir = digitalRead(MOTION_SENSOR_PIN);
-   sensors.flex = digitalRead(DOOR_SENSOR_PIN);
+   sensors.pir = digitalRead(PIR_SENSOR_PIN);
+   sensors.tilt = digitalRead(TILT_SWITCH_PIN);
    sensors.pirPrevious = sensors.pir;
-   sensors.flexPrevious = sensors.flex;
+   sensors.tiltPrevious = sensors.tilt;
    
    // Set initial state
    currentState = IDLE;
    systemFlags.armed = false;
    
-   Serial.println("System initialized successfully");
+   Serial.println("System initialised successfully");
    Serial.println("Send 'ARM' to arm the system, 'DISARM' to disarm");
    Serial.println("===========================================");
  }

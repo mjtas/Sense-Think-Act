@@ -15,14 +15,14 @@
    
    // Read current pin states (quick operation)
    bool currentPIR = digitalRead(PIR_SENSOR_PIN);
-   bool currentFlex = digitalRead(FLEX_SENSOR_PIN);
+   bool currentTilt = digitalRead(TILT_SWITCH_PIN);
    
    // Set specific flags if state changed
    if (currentPIR != sensors.pir) {
      pirDetected = true;
    }
-   if (currentFlex != sensors.flex) {
-     flexDetected = true;
+   if (currentTilt != sensors.tilt) {
+     tiltDetected = true;
    }
  }
  
@@ -107,17 +107,17 @@
    }
    
    // Handle door sensor change
-   if (flexDetected) {
-     if (currentTime - sensors.flexLastChange > DEBOUNCE_DELAY) {
-       sensors.flexPrevious = sensors.flex;
-       sensors.flex = digitalRead(FLEX_SENSOR_PIN);
-       sensors.flexLastChange = currentTime;
+   if (tiltDetected) {
+     if (currentTime - sensors.tiltLastChange > DEBOUNCE_DELAY) {
+       sensors.tiltPrevious = sensors.tilt;
+       sensors.tilt = digitalRead(TILT_SWITCH_PIN);
+       sensors.tiltLastChange = currentTime;
        stateChanged = true;
        
        Serial.print("SENSOR: Door sensor = ");
-       Serial.println(sensors.flex ? "OPEN" : "CLOSED");
+       Serial.println(sensors.tilt ? "OPEN" : "CLOSED");
      }
-     flexDetected = false;
+     tiltDetected = false;
    }
    
    pciTriggered = false;
@@ -137,7 +137,6 @@
    
    // Read temperature sensor
    readTemperatureSensor();
-
    
    // Log periodic status if in monitoring mode
    if (currentState == MONITORING) {

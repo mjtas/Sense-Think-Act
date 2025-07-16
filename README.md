@@ -114,9 +114,10 @@ Motion Sensor (PIR):
 - GND → GND
 - OUT → Pin D8
 
-Door Sensor (Flex Sensor):
-- One terminal → Pin D9
-- Other terminal → GND
+Door Sensor (Tilt Switch):
+- OUT → Pin D9
+- VCC → 5V 
+- GND → GND
 
 Status LED:
 - Uses built-in LED on Pin D13

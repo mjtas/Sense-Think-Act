@@ -10,7 +10,7 @@
  
  // Input pins
  extern const int PIR_SENSOR_PIN;
- extern const int FLEX_SENSOR_PIN;
+ extern const int TILT_SWITCH_PIN;
  extern const int TEMP_SENSOR_PIN;
  
  // Output pins
@@ -35,11 +35,11 @@
  // Sensor state structure
  struct SensorStates {
    bool pir;
-   bool flex;
+   bool tilt;
    bool pirPrevious;
-   bool flexPrevious;
+   bool tiltPrevious;
    unsigned long pirLastChange;
-   unsigned long flexLastChange;
+   unsigned long tiltLastChange;
    int temperature;
    unsigned long tempLastRead;
  };
@@ -55,7 +55,7 @@
 
  // Interrupt flags (volatile)
  extern volatile bool pirDetected;
- extern volatile bool flexDetected;
+ extern volatile bool tiltDetected;
  extern volatile bool timerTick;
  extern volatile bool pciTriggered;
  

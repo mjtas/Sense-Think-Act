@@ -1,6 +1,5 @@
 /*
- * Sensors Header
- * Declarations for sensor reading and processing functions
+ * Sensors Header declares sensor reading and processing functions
  */
 
  #ifndef SENSORS_H

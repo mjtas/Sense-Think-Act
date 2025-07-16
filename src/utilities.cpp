@@ -26,7 +26,7 @@
    Serial.print("Armed: "); Serial.println(systemFlags.armed ? "YES" : "NO");
    Serial.print("Alarm Active: "); Serial.println(systemFlags.alarmActive ? "YES" : "NO");
    Serial.print("Motion Sensor: "); Serial.println(sensors.pir ? "ACTIVE" : "INACTIVE");
-   Serial.print("Door Sensor: "); Serial.println(sensors.flex ? "OPEN" : "CLOSED");
+   Serial.print("Door Sensor: "); Serial.println(sensors.tilt ? "OPEN" : "CLOSED");
    Serial.print("Temperature: "); Serial.print(sensors.temperature); Serial.println("°C");
    Serial.print("Uptime: "); Serial.print(millis() / 1000); Serial.println(" seconds");
    Serial.println("====================\n");
@@ -45,7 +45,7 @@
        Serial.print(" | Motion: ");
        Serial.print(sensors.pir ? "1" : "0");
        Serial.print(" | Door: ");
-       Serial.print(sensors.flex ? "1" : "0");
+       Serial.print(sensors.tilt ? "1" : "0");
        Serial.print(" | Temp: ");
        Serial.print(sensors.temperature);
        Serial.println("°C");

@@ -1,0 +1,82 @@
+{
+  "version": 1,
+    "author": "Mary Bickel",
+    "editor": "wokwi",
+    "parts": [
+    {
+      "id": "arduino_uno",
+      "type": "wokwi-arduino-uno",
+      "left": 100,
+      "top": 100,
+      "attrs": {}
+    },
+    {
+      "id": "pir_sensor",
+      "type": "wokwi-pir-motion-sensor",
+      "left": 400,
+      "top": 0,
+      "attrs": {}
+    },
+    {
+      "id": "tilt_switch",
+      "type": "wokwi-tilt-switch",
+      "left": 10,
+      "top": 0,
+      "attrs": {}
+    },
+    {
+      "id": "tmp36_sensor",
+      "type": "wokwi-ntc-temperature-sensor",
+      "left": 150,
+      "top": 350,
+      "attrs": {}
+    },
+    {
+      "id": "status_led",
+      "type": "wokwi-led",
+      "left": 130,
+      "top": 10,
+      "attrs": {
+        "color": "green"
+      }
+    },
+    {
+      "id": "alarm_led",
+      "type": "wokwi-led",
+      "left": 250,
+      "top": 10,
+      "attrs": {
+        "color": "red"
+      }
+    },
+    {
+      "id": "piezo_buzzer",
+      "type": "wokwi-buzzer",
+      "left": 300,
+      "top": 0,
+      "attrs": {
+      }
+    }
+  ],
+  "connections": [
+    ["arduino_uno:8", "pir_sensor:OUT", "yellow", ["v10", "h5", "*", "v10", "h5"]],
+    ["pir_sensor:VCC", "arduino_uno:5V", "red", ["v10", "h5", "*", "v10", "h5"]],
+    ["pir_sensor:GND", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
+    ["tilt_switch:OUT", "arduino_uno:9", "blue", ["v10", "h5", "*", "v10", "h5"]],
+    ["arduino_uno:5V", "tilt_switch:VCC", "red", ["v10", "h5", "*", "v10", "h5"]],
+    ["tilt_switch:GND", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
+    ["arduino_uno:13", "status_led:A", "green", ["v10", "h5", "*", "v10", "h5"]],
+    ["arduino_uno:7", "alarm_led:A", "orange", ["v10", "h5", "*", "v10", "h5"]],
+    ["alarm_led:C", "arduino_uno:GND.1", "black", ["v20", "h5", "*", "v20", "h5"]],
+    ["arduino_uno:6", "piezo_buzzer:2", "purple", ["v10", "h5", "*", "v10", "h5"]],
+    ["piezo_buzzer:1", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
+    ["tmp36_sensor:OUT", "arduino_uno:A0", "white", ["v10", "h15", "*", "v10", "h15"]],
+    ["tmp36_sensor:VCC", "arduino_uno:5V", "red", ["v10", "h5", "*", "v10", "h5"]],
+    ["tmp36_sensor:GND", "arduino_uno:GND.2", "black", ["v10", "h5", "*", "v10", "h5"]]
+  ],
+  "serialMonitor": {
+    "display": "always",
+    "newline": "lf",
+    "convertEol": true
+  }
+}

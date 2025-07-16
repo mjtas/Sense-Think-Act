@@ -24,7 +24,7 @@
        if (!systemFlags.armed) {
          nextState = IDLE;
        }
-       else if (sensors.pir || sensors.flex) {
+       else if (sensors.pir || sensors.tilt) {
          nextState = ALERT;
          Serial.println("STATE: Intrusion detected - Alert mode");
        }
@@ -35,13 +35,13 @@
        if (!systemFlags.armed) {
          nextState = IDLE;
        }
-       else if (sensors.pir && sensors.flex) {
+       else if (sensors.pir && sensors.tilt) {
          nextState = ALARM;
          systemFlags.alarmStartTime = millis();
          systemFlags.alarmActive = true;
          Serial.println("STATE: Multiple sensors triggered - Alarm mode");
        }
-       else if (!sensors.pir && !sensors.flex) {
+       else if (!sensors.pir && !sensors.tilt) {
          nextState = MONITORING;
          Serial.println("STATE: Sensors clear - Returning to monitoring");
        }
