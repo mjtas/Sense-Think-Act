@@ -26,8 +26,9 @@
    Serial.print("Armed: "); Serial.println(systemFlags.armed ? "YES" : "NO");
    Serial.print("Alarm Active: "); Serial.println(systemFlags.alarmActive ? "YES" : "NO");
    Serial.print("Motion Sensor: "); Serial.println(sensors.pir ? "ACTIVE" : "INACTIVE");
-   Serial.print("Door Sensor: "); Serial.println(sensors.tilt ? "OPEN" : "CLOSED");
+   Serial.print("Gas Alert: "); Serial.println(sensors.gasSafe ? "SAFE" : "DANGER");
    Serial.print("Temperature: "); Serial.print(sensors.temperature); Serial.println("°C");
+   Serial.print("Gas: "); Serial.print(sensors.gas); Serial.println("°C");
    Serial.print("Uptime: "); Serial.print(millis() / 1000); Serial.println(" seconds");
    Serial.println("====================\n");
  }
@@ -44,11 +45,12 @@
        Serial.print(stateToString(currentState));
        Serial.print(" | Motion: ");
        Serial.print(sensors.pir ? "1" : "0");
-       Serial.print(" | Door: ");
-       Serial.print(sensors.tilt ? "1" : "0");
+       Serial.print(" | Gas Alert: ");
+       Serial.print(sensors.gasSafe ? "0" : "1");
        Serial.print(" | Temp: ");
        Serial.print(sensors.temperature);
-       Serial.println("°C");
+       Serial.print("°C | Gas: ");
+       Serial.println(sensors.gas);
      }
      lastSerialUpdate = currentTime;
    }

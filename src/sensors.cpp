@@ -8,18 +8,20 @@
   * Read analog temperature sensor
   * Converts ADC reading to approximate temperature
   */
- void readTemperatureSensor() {
+ void readAnalogSensors() {
    unsigned long currentTime = millis();
    
    if (currentTime - sensors.tempLastRead >= TEMP_READ_INTERVAL) {
      int adcValue = analogRead(TEMP_SENSOR_PIN);
-     // Convert to approximate temperature (assuming TMP36 sensor)
-     sensors.temperature = ((adcValue * 5000L / 1024) - 500) / 10;
+     // Convert to approximate temperature
+     sensors.temperature = 1 / (log(1 / (1023. / adcValue - 1)) / 3950 + 1.0 / 298.15) - 273.15; // 3950 is BETA coefficient of thermistor
+     sensors.gas = analogRead(GAS_A_PIN);
      sensors.tempLastRead = currentTime;
-     
+
      Serial.print("SENSOR: Temperature = ");
      Serial.print(sensors.temperature);
-     Serial.println("°C");
+     Serial.print("°C; Gas = ");
+     Serial.println(sensors.gas);
    }
  }
  

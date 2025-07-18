@@ -10,8 +10,9 @@
  
  // Input pins
  extern const int PIR_SENSOR_PIN;
- extern const int TILT_SWITCH_PIN;
+ extern const int GAS_D_PIN;
  extern const int TEMP_SENSOR_PIN;
+ extern const int GAS_A_PIN;
  
  // Output pins
  extern const int STATUS_LED_PIN;
@@ -35,12 +36,13 @@
  // Sensor state structure
  struct SensorStates {
    bool pir;
-   bool tilt;
+   bool gasSafe;
    bool pirPrevious;
-   bool tiltPrevious;
+   bool gasPrevious;
    unsigned long pirLastChange;
-   unsigned long tiltLastChange;
+   unsigned long gasLastChange;
    int temperature;
+   int gas;
    unsigned long tempLastRead;
  };
  
@@ -55,7 +57,7 @@
 
  // Interrupt flags (volatile)
  extern volatile bool pirDetected;
- extern volatile bool tiltDetected;
+ extern volatile bool gasDetected;
  extern volatile bool timerTick;
  extern volatile bool pciTriggered;
  

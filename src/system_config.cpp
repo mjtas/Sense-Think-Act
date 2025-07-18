@@ -8,12 +8,13 @@
 
  // Pin definitions
 
- const int PIR_SENSOR_PIN = 8;        // PCINT0
- const int TILT_SWTICH_PIN = 9;      // PCINT1
+ const int PIR_SENSOR_PIN = 8;       // PCINT0
+ const int GAS_D_PIN = 9;          // PCINT1
  const int STATUS_LED_PIN = 13;      // Built-in LED
  const int ALARM_LED_PIN = 7;        // External alarm LED
  const int BUZZER_PIN = 6;           // Buzzer for audio alerts
  const int TEMP_SENSOR_PIN = A0;     // Analog temperature sensor
+ const int GAS_A_PIN = A1;         // Analog gas output
  
  // Timing constants
  
@@ -24,7 +25,7 @@
  
  // Interrupt flags (volatile)
  volatile bool pirDetected = false;
- volatile bool tiltDetected = false;
+ volatile bool gasDetected = false;
  volatile bool timerTick = false;
  volatile bool pciTriggered = false;
  
@@ -33,7 +34,7 @@
  SystemState previousState = IDLE;
  
  // System data structures
- SensorStates sensors = {false, false, false, false, 0, 0, 0, 0};
+ SensorStates sensors = {false, false, false, false, 0, 0, 0, 0, 0};
  SystemFlags systemFlags = {false, false, false, 0, 0};
  
  // Timing variables
@@ -46,7 +47,7 @@
    
    // Configure pins
    pinMode(PIR_SENSOR_PIN, INPUT_PULLUP);
-   pinMode(TILT_SWITCH_PIN, INPUT_PULLUP);
+   pinMode(GAS_D_PIN, INPUT_PULLUP);
    pinMode(STATUS_LED_PIN, OUTPUT);
    pinMode(ALARM_LED_PIN, OUTPUT);
    pinMode(BUZZER_PIN, OUTPUT);
@@ -62,9 +63,9 @@
    
    // Initialise sensor states
    sensors.pir = digitalRead(PIR_SENSOR_PIN);
-   sensors.tilt = digitalRead(TILT_SWITCH_PIN);
+   sensors.gas = digitalRead(GAS_D_PIN);
    sensors.pirPrevious = sensors.pir;
-   sensors.tiltPrevious = sensors.tilt;
+   sensors.gasPrevious = sensors.gas;
    
    // Set initial state
    currentState = IDLE;

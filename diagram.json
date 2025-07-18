@@ -6,8 +6,8 @@
     {
       "id": "arduino_uno",
       "type": "wokwi-arduino-uno",
-      "left": 100,
-      "top": 100,
+      "left": 130,
+      "top": 130,
       "attrs": {}
     },
     {
@@ -18,17 +18,19 @@
       "attrs": {}
     },
     {
-      "id": "tilt_switch",
-      "type": "wokwi-tilt-switch",
-      "left": 10,
-      "top": 0,
-      "attrs": {}
+      "id": "gas_sensor",
+      "type": "wokwi-gas-sensor",
+      "left": -50,
+      "top": 190,
+      "attrs": {
+        "threshold": "44"
+      }
     },
     {
       "id": "tmp36_sensor",
       "type": "wokwi-ntc-temperature-sensor",
       "left": 150,
-      "top": 350,
+      "top": 380,
       "attrs": {}
     },
     {
@@ -59,20 +61,22 @@
     }
   ],
   "connections": [
-    ["arduino_uno:8", "pir_sensor:OUT", "yellow", ["v10", "h5", "*", "v10", "h5"]],
-    ["pir_sensor:VCC", "arduino_uno:5V", "red", ["v10", "h5", "*", "v10", "h5"]],
-    ["pir_sensor:GND", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
-    ["tilt_switch:OUT", "arduino_uno:9", "blue", ["v10", "h5", "*", "v10", "h5"]],
-    ["arduino_uno:5V", "tilt_switch:VCC", "red", ["v10", "h5", "*", "v10", "h5"]],
-    ["tilt_switch:GND", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
-    ["arduino_uno:13", "status_led:A", "green", ["v10", "h5", "*", "v10", "h5"]],
-    ["arduino_uno:7", "alarm_led:A", "orange", ["v10", "h5", "*", "v10", "h5"]],
-    ["alarm_led:C", "arduino_uno:GND.1", "black", ["v20", "h5", "*", "v20", "h5"]],
-    ["arduino_uno:6", "piezo_buzzer:2", "purple", ["v10", "h5", "*", "v10", "h5"]],
-    ["piezo_buzzer:1", "arduino_uno:GND.1", "black", ["v10", "h5", "*", "v10", "h5"]],
-    ["tmp36_sensor:OUT", "arduino_uno:A0", "white", ["v10", "h15", "*", "v10", "h15"]],
-    ["tmp36_sensor:VCC", "arduino_uno:5V", "red", ["v10", "h5", "*", "v10", "h5"]],
-    ["tmp36_sensor:GND", "arduino_uno:GND.2", "black", ["v10", "h5", "*", "v10", "h5"]]
+    ["arduino_uno:8", "pir_sensor:OUT", "yellow", ["v0", "h0", "*", "v10", "h0"]],
+    ["pir_sensor:VCC", "arduino_uno:5V", "red", ["v30", "h0", "*", "v35", "h0"]],
+    ["pir_sensor:GND", "arduino_uno:GND.1", "black", ["v0", "h0", "*", "v-20", "h0"]],
+    ["gas_sensor:DOUT", "arduino_uno:9", "blue", ["v0", "h5", "*", "v-30", "h0"]],
+    ["gas_sensor:AOUT", "arduino_uno:A1", "purple", ["v00", "h20", "*", "v25", "h0"]],
+    ["arduino_uno:5V", "gas_sensor:VCC", "red", ["v0", "h0", "*", "v120", "h10"]],
+    ["gas_sensor:GND", "arduino_uno:GND.1", "black", ["v0", "h13", "*", "v-20", "h0"]],
+    ["arduino_uno:13", "status_led:A", "green", ["v10", "h0", "*", "v40", "h0"]],
+    ["arduino_uno:7", "alarm_led:A", "orange", ["v0", "h0", "*", "v40", "h0"]],
+    ["status_led:C", "arduino_uno:GND.1", "black", ["v0", "h0", "*", "v-20", "h0"]],
+    ["alarm_led:C", "arduino_uno:GND.1", "black", ["v20", "h0", "*", "v-20", "h0"]],
+    ["arduino_uno:6", "piezo_buzzer:2", "purple", ["v0", "h0", "*", "v45", "h0"]],
+    ["piezo_buzzer:1", "arduino_uno:GND.1", "black", ["v0", "h0", "*", "v-20", "h0"]],
+    ["tmp36_sensor:OUT", "arduino_uno:A0", "white", ["v0", "h0", "*", "v104", "h0"]],
+    ["tmp36_sensor:VCC", "arduino_uno:5V", "red", ["v0", "h5", "*", "v10", "h0"]],
+    ["tmp36_sensor:GND", "arduino_uno:GND.2", "black", ["v0", "h0", "*", "v85", "h0"]]
   ],
   "serialMonitor": {
     "display": "always",

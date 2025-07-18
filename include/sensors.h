@@ -7,7 +7,7 @@
  
  #include "system_config.h"
 
- void readTemperatureSensor();
+ void readAnalogSensors();
  void processSerialCommands();
  
  #endif // SENSORS_H

@@ -3,6 +3,7 @@
  */
 
  #include "interrupts.h"
+ #include "state_machine.h"
 
  /*
   * Pin Change Interrupt Service Routine
@@ -15,14 +16,14 @@
    
    // Read current pin states (quick operation)
    bool currentPIR = digitalRead(PIR_SENSOR_PIN);
-   bool currentTilt = digitalRead(TILT_SWITCH_PIN);
+   bool currentGasSafe = digitalRead(GAS_D_PIN);
    
    // Set specific flags if state changed
    if (currentPIR != sensors.pir) {
      pirDetected = true;
    }
-   if (currentTilt != sensors.tilt) {
-     tiltDetected = true;
+   if (currentGasSafe != sensors.gasSafe) {
+     gasDetected = true;
    }
  }
  
@@ -106,23 +107,26 @@
      pirDetected = false;
    }
    
-   // Handle door sensor change
-   if (tiltDetected) {
-     if (currentTime - sensors.tiltLastChange > DEBOUNCE_DELAY) {
-       sensors.tiltPrevious = sensors.tilt;
-       sensors.tilt = digitalRead(TILT_SWITCH_PIN);
-       sensors.tiltLastChange = currentTime;
+   // Handle gas alert
+   if (gasDetected) {
+     if (currentTime - sensors.gasLastChange > DEBOUNCE_DELAY) {
+       sensors.gasPrevious = sensors.gas;
+       sensors.gas = digitalRead(GAS_D_PIN);
+       sensors.gasLastChange = currentTime;
        stateChanged = true;
        
-       Serial.print("SENSOR: Door sensor = ");
-       Serial.println(sensors.tilt ? "OPEN" : "CLOSED");
+       Serial.print("SENSOR: Gas sensor = ");
+       Serial.println(sensors.gas ? "SAFE" : "DANGER");
      }
-     tiltDetected = false;
+     gasDetected = false;
    }
    
    pciTriggered = false;
    
-   // Trigger state machine update if sensors changed ** TO ADD **
+   // Trigger state machine update if sensors changed
+   if (stateChanged) {
+    processStateMachine();
+  }
  }
  
  /*
@@ -135,8 +139,8 @@
    // Update status LED
    digitalWrite(STATUS_LED_PIN, systemFlags.statusLedState);
    
-   // Read temperature sensor
-   readTemperatureSensor();
+   // Read analog sensors
+   readAnalogSensors();
    
    // Log periodic status if in monitoring mode
    if (currentState == MONITORING) {

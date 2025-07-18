@@ -24,9 +24,13 @@
        if (!systemFlags.armed) {
          nextState = IDLE;
        }
-       else if (sensors.pir || sensors.tilt) {
+       else if (sensors.pir) {
          nextState = ALERT;
          Serial.println("STATE: Intrusion detected - Alert mode");
+       }
+       else if (!sensors.gasSafe) {
+        nextState = ALERT;
+        Serial.println("STATE: Dangerous gas levels - Alert mode");
        }
        break;
        
@@ -35,13 +39,13 @@
        if (!systemFlags.armed) {
          nextState = IDLE;
        }
-       else if (sensors.pir && sensors.tilt) {
+       else if (sensors.pir && !sensors.gasSafe) {
          nextState = ALARM;
          systemFlags.alarmStartTime = millis();
          systemFlags.alarmActive = true;
          Serial.println("STATE: Multiple sensors triggered - Alarm mode");
        }
-       else if (!sensors.pir && !sensors.tilt) {
+       else if (!sensors.pir && sensors.gasSafe) {
          nextState = MONITORING;
          Serial.println("STATE: Sensors clear - Returning to monitoring");
        }
