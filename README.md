@@ -1,5 +1,5 @@
 # Sense-Think-Act
-This project implements a comprehensive Sense-Think-Act (STA) architecture on Arduino, designed as a security monitoring system that demonstrates advanced interrupt handling, state machine design, and modular programming practices.  It is organised into multiple files for better maintainability and code organisation.
+This project implements a comprehensive Sense-Think-Act (STA) architecture on Arduino, designed as a home monitoring system that demonstrates advanced interrupt handling, state machine design, and modular programming practices.  It is organised into multiple files for better maintainability and code organisation.
 
 ## System Architecture
 ### Sense-Think-Act Pattern
@@ -16,33 +16,33 @@ This project implements a comprehensive Sense-Think-Act (STA) architecture on Ar
 
 ### Components
 - Arduino Uno
-- 2 x Digital sensors (PIR detector for motion, flex sensor for door or window)
+- 2 x Digital sensors (PIR detector for motion, mq2 sensor for gas)
 - 2 x LEDs (status and alarm indicators)
 - 1 x Piezo speaker
-- 1x Analog temperature sensor (TMP36)
-- Resistors and breadboard for connections
+- 1x Analog temperature sensor
 
 #### Pin Configuration
 - Motion Sensor  → Pin D8  (PCINT0)
-- Door Sensor    → Pin D9  (PCINT1)
-- Status LED     → Pin D13 (Built-in LED)
+- Gas Digital    → Pin D9  (PCINT1)
+- Status LED     → Pin D13
 - Alarm LED      → Pin D7
 - Buzzer         → Pin D6
-- Temperature    → Pin A0  (Analog)
+- Temperature    → Pin A0
+- Gas Analog     → Pin A1
+
 
 ## Software Architecture
 ### Interrupt System
 Pin Change Interrupt (PCINT0_vect)
 - Monitors pins D8-D13 group
-- Specifically configured for D8 (pir) and D9 (flex)
+- Specifically configured for D8 (pir) and D9 (digital gas)
 - Sets flags for main loop processing
 - Includes basic debouncing logic
-
 
 Timer1 Interrupt (TIMER1_COMPA_vect)
 - 1-second periodic interrupt
 - Handles status LED blinking
-- Triggers temperature readings
+- Triggers analogue temperature and gas readings
 - Provides system heartbeat
 
 Interrupt Safety Measures
@@ -54,13 +54,13 @@ Interrupt Safety Measures
 ### State Machine
 The system operates through four states:
 - IDLE: System disarmed, minimal monitoring
-- MONITORING: Armed and watching for intrusions
+- MONITORING: Armed and actively monitoring
 - ALERT: Single sensor triggered, brief warning state
-- ALARM: Multiple sensors or sustained alert condition
+- ALARM: Multiple sensors or dangerous gas levels alert condition
 
 ### Modular Function Design
 - Initialisation: systemInit(), setupPinChangeInterrupts(), setupTimerInterrupt()
-- Sensing: processPCIEvents(), readTemperatureSensor(), processSerialCommands()
+- Sensing: processPCIEvents(), readAnalogSensors(), processSerialCommands()
 - Thinking: processStateMachine(), processTimerEvents(), executeStateActions()
 - Acting: updateSystemOutputs()
 - Monitoring: printSystemStatus(), periodicStatusUpdate()
@@ -86,7 +86,7 @@ interrupts.h/cpp
 - Interrupt event processing functions
 
 sensors.h/cpp
-- Temperature sensor reading
+- Analog sensor reading
 - Serial command processing
 - Input validation and processing
 
@@ -108,32 +108,7 @@ utilities.h/cpp
 - System monitoring functions
 
 ## Setup Instructions
-1. Hardware Assembly
-Motion Sensor (PIR):
-- VCC → 5V
-- GND → GND
-- OUT → Pin D8
-
-Door Sensor (Tilt Switch):
-- OUT → Pin D9
-- VCC → 5V 
-- GND → GND
-
-Status LED:
-- Uses built-in LED on Pin D13
-
-Alarm LED:
-- Anode → Pin D7
-- Cathode → GND (through 220Ω resistor)
-
-Piezo Speaker:
-- Positive → Pin D6
-- Negative → GND
-
-Temperature Sensor (TMP36):
-- VCC → 5V
-- GND → GND
-- VOUT → Pin A0
+Refer to diagram.json for hardware assembly
 
 ## Operation Guide
 Serial Commands
@@ -142,7 +117,7 @@ Serial Commands
 - STATUS: Display comprehensive system status
 
 System Behavior
-- Startup: System initialixes in IDLE state
+- Startup: System initialises in IDLE state
 - Arming: Send ARM command to enter MONITORING state
 - Detection: Sensor triggers cause state transitions
 - Alerting: Visual and audio feedback based on threat level
