@@ -23,7 +23,8 @@
       "left": -50,
       "top": 190,
       "attrs": {
-        "threshold": "44"
+        "ppm": "200",
+        "threshold": "4.4"
       }
     },
     {

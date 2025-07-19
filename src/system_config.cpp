@@ -21,11 +21,11 @@
  const unsigned long DEBOUNCE_DELAY = 50;     // ms
  const unsigned long ALARM_TIMEOUT = 10000;   // ms
  const unsigned long TEMP_READ_INTERVAL = 2000; // ms
- const unsigned long SERIAL_UPDATE_INTERVAL = 500; // ms
+ const unsigned long SERIAL_UPDATE_INTERVAL = 1000; // ms
  
  // Interrupt flags (volatile)
- volatile bool pirDetected = false;
- volatile bool gasDetected = false;
+ volatile bool pirChange = false;
+ volatile bool gasChange = false;
  volatile bool timerTick = false;
  volatile bool pciTriggered = false;
  
@@ -34,7 +34,7 @@
  SystemState previousState = IDLE;
  
  // System data structures
- SensorStates sensors = {false, false, false, false, 0, 0, 0, 0, 0};
+ SensorStates sensors = {false, true, false, false, 0, 0, 0, 0, 0};
  SystemFlags systemFlags = {false, false, false, 0, 0};
  
  // Timing variables
@@ -43,7 +43,7 @@
  // System initialisation
  void systemInit() {
    Serial.begin(115200);
-   Serial.println("=== Sense-Think-Act System Initialising ===");
+   Serial.println("=== Home Monitoring System Initialising ===");
    
    // Configure pins
    pinMode(PIR_SENSOR_PIN, INPUT_PULLUP);
@@ -63,9 +63,9 @@
    
    // Initialise sensor states
    sensors.pir = digitalRead(PIR_SENSOR_PIN);
-   sensors.gas = digitalRead(GAS_D_PIN);
+   sensors.gasSafe = digitalRead(GAS_D_PIN);
    sensors.pirPrevious = sensors.pir;
-   sensors.gasPrevious = sensors.gas;
+   sensors.gasPrevious = sensors.gasSafe;
    
    // Set initial state
    currentState = IDLE;

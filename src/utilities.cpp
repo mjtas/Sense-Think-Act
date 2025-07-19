@@ -28,8 +28,8 @@
    Serial.print("Motion Sensor: "); Serial.println(sensors.pir ? "ACTIVE" : "INACTIVE");
    Serial.print("Gas Alert: "); Serial.println(sensors.gasSafe ? "SAFE" : "DANGER");
    Serial.print("Temperature: "); Serial.print(sensors.temperature); Serial.println("°C");
-   Serial.print("Gas: "); Serial.print(sensors.gas); Serial.println("°C");
-   Serial.print("Uptime: "); Serial.print(millis() / 1000); Serial.println(" seconds");
+   Serial.print("Gas: "); Serial.println(sensors.gasReading);
+   Serial.println("Uptime: "); Serial.print(millis() / 1000); Serial.println(" seconds");
    Serial.println("====================\n");
  }
  
@@ -50,7 +50,7 @@
        Serial.print(" | Temp: ");
        Serial.print(sensors.temperature);
        Serial.print("°C | Gas: ");
-       Serial.println(sensors.gas);
+       Serial.println(sensors.gasReading);
      }
      lastSerialUpdate = currentTime;
    }

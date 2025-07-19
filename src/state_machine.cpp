@@ -20,7 +20,7 @@
        break;
        
      case MONITORING:
-       // System armed - monitor for intrusions
+       // System armed - monitor for interrupts
        if (!systemFlags.armed) {
          nextState = IDLE;
        }

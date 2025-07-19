@@ -16,14 +16,14 @@
    
    // Read current pin states (quick operation)
    bool currentPIR = digitalRead(PIR_SENSOR_PIN);
-   bool currentGasSafe = digitalRead(GAS_D_PIN);
+   bool currentGas = digitalRead(GAS_D_PIN);
    
    // Set specific flags if state changed
    if (currentPIR != sensors.pir) {
-     pirDetected = true;
+     pirChange = true;
    }
-   if (currentGasSafe != sensors.gasSafe) {
-     gasDetected = true;
+   if (currentGas != sensors.gasSafe) {
+     gasChange = true;
    }
  }
  
@@ -94,7 +94,7 @@
    bool stateChanged = false;
    
    // Handle motion sensor change
-   if (pirDetected) {
+   if (pirChange) {
      if (currentTime - sensors.pirLastChange > DEBOUNCE_DELAY) {
        sensors.pirPrevious = sensors.pir;
        sensors.pir = digitalRead(PIR_SENSOR_PIN);
@@ -104,21 +104,21 @@
        Serial.print("SENSOR: PIR detector = ");
        Serial.println(sensors.pir ? "ACTIVE" : "INACTIVE");
      }
-     pirDetected = false;
+     pirChange = false;
    }
    
-   // Handle gas alert
-   if (gasDetected) {
+   // Handle gas change
+   if (gasChange) {
      if (currentTime - sensors.gasLastChange > DEBOUNCE_DELAY) {
-       sensors.gasPrevious = sensors.gas;
-       sensors.gas = digitalRead(GAS_D_PIN);
+       sensors.gasPrevious = sensors.gasSafe;
+       sensors.gasSafe = digitalRead(GAS_D_PIN);
        sensors.gasLastChange = currentTime;
        stateChanged = true;
        
        Serial.print("SENSOR: Gas sensor = ");
-       Serial.println(sensors.gas ? "SAFE" : "DANGER");
+       Serial.println(sensors.gasSafe ? "SAFE" : "DANGER");
      }
-     gasDetected = false;
+     gasChange = false;
    }
    
    pciTriggered = false;

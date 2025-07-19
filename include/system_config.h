@@ -42,7 +42,7 @@
    unsigned long pirLastChange;
    unsigned long gasLastChange;
    int temperature;
-   int gas;
+   int gasReading;
    unsigned long tempLastRead;
  };
  
@@ -56,8 +56,8 @@
  };
 
  // Interrupt flags (volatile)
- extern volatile bool pirDetected;
- extern volatile bool gasDetected;
+ extern volatile bool pirChange;
+ extern volatile bool gasChange;
  extern volatile bool timerTick;
  extern volatile bool pciTriggered;
  

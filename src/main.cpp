@@ -28,7 +28,4 @@ void loop() {
    
   // MONITOR: Provide system feedback
   periodicStatusUpdate();      // Serial monitoring
-   
-  // Small delay to prevent overwhelming the system
-   millis();
 }
