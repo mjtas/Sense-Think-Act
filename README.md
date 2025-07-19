@@ -1,4 +1,6 @@
 # Sense-Think-Act
+<img width="595" height="500" alt="Screenshot 2025-07-19 at 8 11 41 pm" src="https://github.com/user-attachments/assets/8e8943a5-aa4f-4a35-873f-e40699d94729" />
+
 This project implements a comprehensive Sense-Think-Act (STA) architecture on Arduino, designed as a home monitoring system that demonstrates advanced interrupt handling, state machine design, and modular programming practices.  It is organised into multiple files for better maintainability and code organisation.
 
 ## System Architecture
