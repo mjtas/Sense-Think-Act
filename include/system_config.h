@@ -25,6 +25,11 @@
  extern const unsigned long TEMP_READ_INTERVAL;
  extern const unsigned long SERIAL_UPDATE_INTERVAL;
  
+ // Threshold constants
+ extern const long GAS_WARNING;
+ extern const long TEMP_LOW_WARNING;
+ extern const long TEMP_HIGH_WARNING;
+
  // System state enumeration
  enum SystemState {
    IDLE,

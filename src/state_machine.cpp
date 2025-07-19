@@ -3,6 +3,7 @@
  */
 
  #include "state_machine.h"
+ #include "system_config.h"
 
  /*
   * Main state machine processor
@@ -28,9 +29,17 @@
          nextState = ALERT;
          Serial.println("STATE: Intrusion detected - Alert mode");
        }
-       else if (!sensors.gasSafe) {
+       else if ((sensors.gasReading > GAS_WARNING) && sensors.gasSafe) {
         nextState = ALERT;
-        Serial.println("STATE: Dangerous gas levels - Alert mode");
+        Serial.println("STATE: High gas levels - Alert mode");
+       }
+       else if ((sensors.temperature > TEMP_HIGH_WARNING)) {
+        nextState = ALERT;
+        Serial.println("STATE: High temperature - Alert mode");
+       }
+       else if ((sensors.temperature < TEMP_LOW_WARNING)) {
+        nextState = ALERT;
+        Serial.println("STATE: Low temperature - Alert mode");
        }
        break;
        
@@ -43,8 +52,16 @@
          nextState = ALARM;
          systemFlags.alarmStartTime = millis();
          systemFlags.alarmActive = true;
-         Serial.println("STATE: Multiple sensors triggered - Alarm mode");
+         Serial.println("STATE: Dangerous gas levels - Alarm mode");
        }
+       else if ((sensors.pir && sensors.gasReading > GAS_WARNING) || 
+       ((sensors.pir || sensors.gasReading > GAS_WARNING) && sensors.temperature > TEMP_HIGH_WARNING) ||
+       ((sensors.pir || sensors.gasReading >GAS_WARNING) && sensors.temperature < TEMP_LOW_WARNING)) {
+        nextState = ALARM;
+        systemFlags.alarmStartTime = millis();
+        systemFlags.alarmActive = true;
+        Serial.println("STATE: Multiple sensors triggered - Alarm mode");
+      }
        else if (!sensors.pir && sensors.gasSafe) {
          nextState = MONITORING;
          Serial.println("STATE: Sensors clear - Returning to monitoring");

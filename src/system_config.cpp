@@ -17,12 +17,16 @@
  const int GAS_A_PIN = A1;         // Analog gas output
  
  // Timing constants
- 
  const unsigned long DEBOUNCE_DELAY = 50;     // ms
  const unsigned long ALARM_TIMEOUT = 10000;   // ms
  const unsigned long TEMP_READ_INTERVAL = 2000; // ms
  const unsigned long SERIAL_UPDATE_INTERVAL = 1000; // ms
  
+ // Threshold constants
+ const long GAS_WARNING = 500; // ppm
+ const long TEMP_LOW_WARNING = 15; // degrees celsius
+ const long TEMP_HIGH_WARNING = 30; // degrees celsius
+
  // Interrupt flags (volatile)
  volatile bool pirChange = false;
  volatile bool gasChange = false;
