@@ -9,5 +9,9 @@
 
  void readAnalogSensors();
  void processSerialCommands();
+ void printHelpCommands();
+ void printDebugInfo();
+ int getFreeRAM();
+
  
  #endif // SENSORS_H

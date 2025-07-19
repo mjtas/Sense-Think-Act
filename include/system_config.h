@@ -21,9 +21,11 @@
  
  // Timing constants 
  extern const unsigned long DEBOUNCE_DELAY;
+ extern const unsigned long STATE_DEBOUNCE_DELAY;
  extern const unsigned long ALARM_TIMEOUT;
  extern const unsigned long TEMP_READ_INTERVAL;
  extern const unsigned long SERIAL_UPDATE_INTERVAL;
+ extern const unsigned long ALERT_TO_ALARM_DELAY;
  
  // Threshold constants
  extern const long GAS_WARNING;
@@ -57,7 +59,9 @@
    bool alarmActive;
    bool statusLedState;
    unsigned long alarmStartTime;
-   unsigned long lastStatusUpdate;
+   unsigned long lastStateChange;
+   bool verboseLogging;
+   int logLevel; // 0=minimal, 1=normal, 2=verbose
  };
 
  // Interrupt flags (volatile)
@@ -69,6 +73,8 @@
  // State variables
  extern SystemState currentState;
  extern SystemState previousState;
+ extern SystemState pendingState;
+ extern unsigned long stateChangeTime;
  
  // System data structures
  extern SensorStates sensors;
@@ -85,4 +91,8 @@
  void printSystemStatus();
  void periodicStatusUpdate();
  
+ #define LOG_MINIMAL(msg) if (systemFlags.logLevel >= 0) Serial.println(msg)
+ #define LOG_NORMAL(msg) if (systemFlags.logLevel >= 1) Serial.println(msg)
+ #define LOG_VERBOSE(msg) if (systemFlags.logLevel >= 2) Serial.println(msg)
+
  #endif // SYSTEM_CONFIG_H

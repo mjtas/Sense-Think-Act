@@ -18,9 +18,11 @@
  
  // Timing constants
  const unsigned long DEBOUNCE_DELAY = 50;     // ms
+ const unsigned long STATE_DEBOUNCE_DELAY = 2000; // ms
  const unsigned long ALARM_TIMEOUT = 10000;   // ms
  const unsigned long TEMP_READ_INTERVAL = 2000; // ms
- const unsigned long SERIAL_UPDATE_INTERVAL = 1000; // ms
+ const unsigned long SERIAL_UPDATE_INTERVAL = 5000; // ms
+ const unsigned long ALERT_TO_ALARM_DELAY = 3000; // ms
  
  // Threshold constants
  const long GAS_WARNING = 500; // ppm
@@ -36,10 +38,13 @@
  // State variables
  SystemState currentState = IDLE;
  SystemState previousState = IDLE;
+ SystemState pendingState = IDLE; // for state debouncing
+ unsigned long stateChangeTime = 0; // track when state change was initiated
+
  
  // System data structures
  SensorStates sensors = {false, true, false, false, 0, 0, 0, 0, 0};
- SystemFlags systemFlags = {false, false, false, 0, 0};
+ SystemFlags systemFlags = {false, false, false, 0, 0, false, 1};
  
  // Timing variables
  unsigned long lastSerialUpdate = 0;
@@ -74,8 +79,10 @@
    // Set initial state
    currentState = IDLE;
    systemFlags.armed = false;
+   systemFlags.verboseLogging = true;
+   systemFlags.logLevel = 1;
    
    Serial.println("System initialised successfully");
-   Serial.println("Send 'ARM' to arm the system, 'DISARM' to disarm");
+   Serial.println("Commands: ARM, DISARM, STATUS, VERBOSE, QUIET, DEBUG");
    Serial.println("===========================================");
  }

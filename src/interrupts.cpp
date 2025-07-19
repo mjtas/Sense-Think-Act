@@ -47,7 +47,7 @@
    // Enable specific pins: PCINT0 (D8) and PCINT1 (D9)
    PCMSK0 |= (1 << PCINT0) | (1 << PCINT1);
    
-   Serial.println("PCI configured for pins D8 (PCINT0) and D9 (PCINT1)");
+   LOG_NORMAL("PCI configured for pins D8 (PCINT0) and D9 (PCINT1)");
  }
  
  /*
@@ -80,7 +80,7 @@
    // Re-enable interrupts
    sei();
    
-   Serial.println("Timer1 configured for 1-second intervals");
+   LOG_NORMAL("Timer1 configured for 1-second intervals");
  }
  
  /*
@@ -101,11 +101,18 @@
        sensors.pirLastChange = currentTime;
        stateChanged = true;
        
-       Serial.print("SENSOR: PIR detector = ");
-       Serial.println(sensors.pir ? "ACTIVE" : "INACTIVE");
-     }
-     pirChange = false;
-   }
+      // Only log significant changes or in verbose mode
+      if (systemFlags.verboseLogging || (sensors.pir && systemFlags.armed)) {
+        LOG_NORMAL("SENSOR: PIR detector = " + String(sensors.pir ? "ACTIVE" : "INACTIVE"));
+      }
+      
+      // Always log motion detection when armed
+      if (sensors.pir && systemFlags.armed && !systemFlags.verboseLogging) {
+        LOG_MINIMAL("ALERT: Motion detected");
+      }
+    }
+    pirChange = false;
+  }
    
    // Handle gas change
    if (gasChange) {
@@ -115,11 +122,11 @@
        sensors.gasLastChange = currentTime;
        stateChanged = true;
        
-       Serial.print("SENSOR: Gas sensor = ");
-       Serial.println(sensors.gasSafe ? "SAFE" : "DANGER");
-     }
-     gasChange = false;
-   }
+       // Always log gas safety changes
+      LOG_MINIMAL("SENSOR: Gas sensor = " + String(sensors.gasSafe ? "SAFE" : "DANGER"));
+    }
+    gasChange = false;
+  }
    
    pciTriggered = false;
    
@@ -142,15 +149,20 @@
    // Read analog sensors
    readAnalogSensors();
    
-   // Log periodic status if in monitoring mode
-   if (currentState == MONITORING) {
-     Serial.println("TIMER: Periodic check - System operational");
-   }
-   
-   // Handle alarm blinking in alert mode
-   if (currentState == ALERT) {
-     digitalWrite(ALARM_LED_PIN, systemFlags.statusLedState);
-   }
+  static int timerCounter = 0;
+  timerCounter++;
+  
+  // Log every 30 seconds in monitoring mode (every 10 seconds if verbose)
+  bool shouldLog = false;
+  if (systemFlags.verboseLogging && (timerCounter % 10 == 0)) {
+    shouldLog = true;
+  } else if (currentState == MONITORING && (timerCounter % 30 == 0)) {
+    shouldLog = true;
+  }
+  
+  if (shouldLog) {
+    LOG_VERBOSE("TIMER: Periodic check - System operational");
+  }
    
    timerTick = false;
  }

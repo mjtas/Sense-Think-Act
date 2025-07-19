@@ -9,5 +9,10 @@
  
  void processStateMachine();
  void executeStateActions();
+ void executeStateTransition(SystemState state);
+ void logTriggerConditions();
+ bool shouldEscalateToAlarm();
+ bool alertConditionsCleared();
+ unsigned long getStateDebounceTime(SystemState state); 
  
  #endif // STATE_MACHINE_H
